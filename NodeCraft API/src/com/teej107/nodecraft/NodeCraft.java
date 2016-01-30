@@ -25,7 +25,7 @@ public class NodeCraft
 	private int version;
 	private JSONParser parser;
 	private Map<String, URL> urlMap;
-	
+
 	public NodeCraft(final String username, char[] apiKey)
 	{
 		Authenticator.setDefault(new NodeCraftAuthenticator(username, apiKey));
@@ -113,42 +113,42 @@ public class NodeCraft
 
 	public Map listServices() throws IOException
 	{
-		return request(GET, address(null, null), null);
+		return request(GET, address(null, null));
 	}
 
 	public Map getService(String id) throws IOException
 	{
-		return request(GET, address(id, null), null);
+		return request(GET, address(id, null));
 	}
 
 	public Map serviceStatus(String id) throws IOException
 	{
-		return request(GET, address(id, "stats"), null);
+		return request(GET, address(id, "stats"));
 	}
 
 	public Map consoleLogs(String id) throws IOException
 	{
-		return request(POST, address(id, "logs"), null);
+		return request(POST, address(id, "logs"));
 	}
 
 	public Map consoleInputHistory(String id) throws IOException
 	{
-		return request(POST, address(id, "history"), null);
+		return request(POST, address(id, "history"));
 	}
 
 	public Map startServerProcess(String id) throws IOException
 	{
-		return request(POST, address(id, "start"), null);
+		return request(POST, address(id, "start"));
 	}
 
 	public Map stopServerProcess(String id) throws IOException
 	{
-		return request(POST, address(id, "stop"), null);
+		return request(POST, address(id, "stop"));
 	}
 
 	public Map killServerProcess(String id) throws IOException
 	{
-		return request(POST, address(id, "kill"), null);
+		return request(POST, address(id, "kill"));
 	}
 
 	public Map consoleCommand(String id, String cmd) throws IOException
@@ -158,16 +158,16 @@ public class NodeCraft
 
 	public Map listAllDonations() throws IOException
 	{
-		return request(GET, coOpVault(), null);
+		return request(GET, coOpVault());
 	}
 
 	public Map listDonationsByMonth(int month, Integer year) throws IOException
 	{
 		Map.Entry[] entries = new Map.Entry[year == null ? 1 : 2];
-		entries[0] = new AbstractMap.SimpleEntry("month", month);
+		entries[0] = new AbstractMap.SimpleEntry<>("month", month);
 		if (year != null)
 		{
-			entries[1] = new AbstractMap.SimpleEntry("year", year);
+			entries[1] = new AbstractMap.SimpleEntry<>("year", year);
 		}
 		return request(POST, coOpVault(), entries);
 	}
