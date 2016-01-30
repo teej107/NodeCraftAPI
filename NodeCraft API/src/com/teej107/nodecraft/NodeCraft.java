@@ -26,7 +26,12 @@ public class NodeCraft
 	private JSONParser parser;
 	private Map<String, URL> urlMap;
 
-	public NodeCraft(final String username, char[] apiKey)
+	/**
+	 * Connect to NodeCraft with the given username and API key
+	 * @param username E-mail or username
+	 * @param apiKey API key
+	 */
+	public NodeCraft(String username, char[] apiKey)
 	{
 		Authenticator.setDefault(new NodeCraftAuthenticator(username, apiKey));
 		this.version = 1;
@@ -93,6 +98,11 @@ public class NodeCraft
 		return URL + "v" + version + "/co-op-vault";
 	}
 
+	/**
+	 * Get the current rate limiting status
+	 * @return Map
+	 * @throws IOException
+	 */
 	public static Map currentRateLimit() throws IOException
 	{
 		if (RATE_LIMIT == null)
@@ -111,56 +121,122 @@ public class NodeCraft
 		return null;
 	}
 
+	/**
+	 * Get a list of all user's services
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map listServices() throws IOException
 	{
 		return request(GET, address(null, null));
 	}
 
+	/**
+	 * Get information about a service by given ID
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map getService(String id) throws IOException
 	{
 		return request(GET, address(id, null));
 	}
 
+	/**
+	 * Get status, disk, ram and CPU stats of a service by given ID
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map serviceStatus(String id) throws IOException
 	{
 		return request(GET, address(id, "stats"));
 	}
 
+	/**
+	 * Get last 300 lines of console logs of a service by given ID
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map consoleLogs(String id) throws IOException
 	{
 		return request(POST, address(id, "logs"));
 	}
 
+	/**
+	 * Get input history of a service by given ID
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map consoleInputHistory(String id) throws IOException
 	{
 		return request(POST, address(id, "history"));
 	}
 
+	/**
+	 * Starts a service by given ID
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map startServerProcess(String id) throws IOException
 	{
 		return request(POST, address(id, "start"));
 	}
 
+	/**
+	 * Stops a service by given ID
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map stopServerProcess(String id) throws IOException
 	{
 		return request(POST, address(id, "stop"));
 	}
 
+	/**
+	 * Kills a service by given ID. You should only use this if a "stop" fails. Killing the server forcefully may result in data loss
+	 * @param id Service ID
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map killServerProcess(String id) throws IOException
 	{
 		return request(POST, address(id, "kill"));
 	}
 
+	/**
+	 * Sends a console command to a service by given ID
+	 * @param id Service ID
+	 * @param cmd Console command to send to the service
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map consoleCommand(String id, String cmd) throws IOException
 	{
 		return request(POST, address(id, "msg"), new AbstractMap.SimpleEntry<>("msg", cmd));
 	}
 
+	/**
+	 * Get all co-op-vault donations
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map listAllDonations() throws IOException
 	{
 		return request(GET, coOpVault());
 	}
 
+	/**
+	 * Get all co-op-vault donations in the month and year specified
+	 * @param month Numerical month 1-12 for donation list
+	 * @param year Numerical year. Defaults to current year if null
+	 * @return Map
+	 * @throws IOException
+	 */
 	public Map listDonationsByMonth(int month, Integer year) throws IOException
 	{
 		Map.Entry[] entries = new Map.Entry[year == null ? 1 : 2];
