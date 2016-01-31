@@ -28,8 +28,9 @@ public class NodeCraft
 
 	/**
 	 * Connect to NodeCraft with the given username and API key
+	 *
 	 * @param username E-mail or username
-	 * @param apiKey API key
+	 * @param apiKey   API key
 	 */
 	public NodeCraft(String username, char[] apiKey)
 	{
@@ -55,7 +56,7 @@ public class NodeCraft
 		URL url = getURL(s);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod(type);
-		if (entries != null)
+		if (entries.length > 0)
 		{
 			connection.setDoOutput(true);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
@@ -74,7 +75,9 @@ public class NodeCraft
 		}
 		try
 		{
-			return (Map) parser.parse(new InputStreamReader(connection.getInputStream()));
+			int code = connection.getResponseCode();
+			boolean error = code >= 400 && code <= 500;
+			return (Map) parser.parse(new InputStreamReader(error ? connection.getErrorStream() : connection.getInputStream()));
 		}
 		catch (ParseException e)
 		{
@@ -100,6 +103,7 @@ public class NodeCraft
 
 	/**
 	 * Get the current rate limiting status
+	 *
 	 * @return Map
 	 * @throws IOException
 	 */
@@ -123,6 +127,7 @@ public class NodeCraft
 
 	/**
 	 * Get a list of all user's services
+	 *
 	 * @return Map
 	 * @throws IOException
 	 */
@@ -133,6 +138,7 @@ public class NodeCraft
 
 	/**
 	 * Get information about a service by given ID
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -144,6 +150,7 @@ public class NodeCraft
 
 	/**
 	 * Get status, disk, ram and CPU stats of a service by given ID
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -155,6 +162,7 @@ public class NodeCraft
 
 	/**
 	 * Get last 300 lines of console logs of a service by given ID
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -166,6 +174,7 @@ public class NodeCraft
 
 	/**
 	 * Get input history of a service by given ID
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -177,6 +186,7 @@ public class NodeCraft
 
 	/**
 	 * Starts a service by given ID
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -188,6 +198,7 @@ public class NodeCraft
 
 	/**
 	 * Stops a service by given ID
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -199,6 +210,7 @@ public class NodeCraft
 
 	/**
 	 * Kills a service by given ID. You should only use this if a "stop" fails. Killing the server forcefully may result in data loss
+	 *
 	 * @param id Service ID
 	 * @return Map
 	 * @throws IOException
@@ -210,7 +222,8 @@ public class NodeCraft
 
 	/**
 	 * Sends a console command to a service by given ID
-	 * @param id Service ID
+	 *
+	 * @param id  Service ID
 	 * @param cmd Console command to send to the service
 	 * @return Map
 	 * @throws IOException
@@ -222,6 +235,7 @@ public class NodeCraft
 
 	/**
 	 * Get all co-op-vault donations
+	 *
 	 * @return Map
 	 * @throws IOException
 	 */
@@ -232,8 +246,9 @@ public class NodeCraft
 
 	/**
 	 * Get all co-op-vault donations in the month and year specified
+	 *
 	 * @param month Numerical month 1-12 for donation list
-	 * @param year Numerical year. Defaults to current year if null
+	 * @param year  Numerical year. Defaults to current year if null
 	 * @return Map
 	 * @throws IOException
 	 */
